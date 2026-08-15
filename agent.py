@@ -1,11 +1,23 @@
 from google.adk.agents.llm_agent import Agent
 
-from tools import (
-    get_incident_by_number,
-    search_incidents_by_caller,
-    search_incidents_by_state,
-    get_incident_updates,
-)
+# Support both package-relative imports (when imported as `gaia_itsm`)
+# and top-level imports (when the module is executed in other contexts).
+try:
+    from .tools.servicenow import (
+        get_incident_by_number,
+        search_incidents_by_caller,
+        search_incidents_by_state,
+        get_incident_updates,
+    )
+except (ImportError, ValueError):
+    # Fallback to absolute import path for environments that don't set
+    # package context (e.g. running as a script or certain importlib loaders).
+    from tools.servicenow import (
+        get_incident_by_number,
+        search_incidents_by_caller,
+        search_incidents_by_state,
+        get_incident_updates,
+    )
 
 root_agent = Agent(
     model="gemini-flash-latest",
